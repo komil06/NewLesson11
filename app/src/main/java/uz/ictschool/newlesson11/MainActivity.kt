@@ -1,5 +1,7 @@
 package uz.ictschool.newlesson11
 
+import android.bluetooth.BluetoothDevice
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,30 +19,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NewLesson11Theme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                val myBroadcast = MyBroadcast()
+                val filter = IntentFilter()
+                filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
+                filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED)
+                filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+                registerReceiver(myBroadcast, filter)
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NewLesson11Theme {
-        Greeting("Android")
-    }
-}
